@@ -6,9 +6,18 @@
 # @version 1.0.0
 # @link    https://github.com/yidas/shell
 
-# Configuration
-echo "Sudoer User: Type the password for sudoer user \`yidas\` if you want to create, empty to skip, followed by [ENTER]:"
-read sudoerPassword
+# Access Configuration
+echo "SSH Login: Do you want turn on SSH PasswordAuthentication? empty to skip, followed by [ENTER]:"
+read sshPasswodAuthOn
+
+echo "Sudoer User: Type the sudoer user name if you want to create, empty to skip, followed by [ENTER]:"
+read sudoerUsername
+
+sudoerPassword=''
+if [ $usePhp5 = true ]; then
+    echo "Sudoer User: Type the password for sudoer user \`{$sudoerUsername}\` if you want to create, or empty, followed by [ENTER]:"
+    read sudoerPassword
+fi
 
 # PHP
 usePhp5=false;
@@ -54,15 +63,18 @@ case $yn in
     * ) installPhpMyAdmin=true;;
 esac
 
-# Sudoer
-user="yidas"
-if [ $sudoerPassword ]; then
-    sudo adduser ${user} --gecos "" --disabled-password
-    echo "${user}:${sudoerPassword}" | sudo chpasswd
-    sudo usermod -a -G sudo ${user}
+# Access
+if [ $sshPasswodAuthOn ]; then
     # Root Login Disabled
     sudo sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
     sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+fi
+
+# Sudoer
+if [ $sudoerUsername ]; then
+    sudo adduser ${sudoerUsername} --gecos "" --disabled-password
+    echo "${sudoerUsername}:${sudoerPassword}" | sudo chpasswd
+    sudo usermod -a -G sudo ${sudoerUsername}
     sudo service ssh reload
 else
     echo "Skip creating user"
