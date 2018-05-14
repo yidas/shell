@@ -7,7 +7,7 @@
 # @link    https://github.com/yidas/shell
 
 # Access Configuration
-sshPasswodAuthOn = false
+sshPasswodAuthOn=false
 echo "SSH Login: Do you want turn on SSH PasswordAuthentication? [Y/n, empty as No]:"
 read sshPasswodAuthOn
 case $yn in
@@ -18,14 +18,14 @@ esac
 echo "Sudoer User: Type the sudoer user name if you want to create, empty to skip, followed by [ENTER]:"
 read sudoerUsername
 
-sudoerPassword = ''
+sudoerPassword=''
 if [ $sudoerUsername ]; then
     echo "Sudoer User: Type the password for sudoer user \`{$sudoerUsername}\` if you want to create, or empty, followed by [ENTER]:"
     read sudoerPassword
 fi
 
 # PHP
-usePhp5 = false;
+usePhp5=false;
 # PHP default
 echo "PHP: Do you want to install PHP 7? \`No\` would install old version PHP 5.6: [Y/n, empty as Yes]"
 read yn
