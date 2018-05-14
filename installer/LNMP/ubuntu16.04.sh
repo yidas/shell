@@ -73,6 +73,7 @@ if [ $sshPasswodAuthOn ]; then
     # Root Login Disabled
     sudo sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
     sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    sudo service ssh reload
 fi
 
 # Sudoer
@@ -80,7 +81,6 @@ if [ $sudoerUsername ]; then
     sudo adduser ${sudoerUsername} --gecos "" --disabled-password
     echo "${sudoerUsername}:${sudoerPassword}" | sudo chpasswd
     sudo usermod -a -G sudo ${sudoerUsername}
-    sudo service ssh reload
 else
     echo "Skip creating user"
 fi
