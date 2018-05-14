@@ -128,9 +128,10 @@ fi
 # PHPMyAdmin
 if [ $installPhpMyAdmin = true ]; then
     # Configuration
-    version="4.7.4"
+    version="4.8.0.1"
     webPath="/var/www/html/"
-    filename="phpMyAdmin-${version}-english"
+    #filename="phpMyAdmin-${version}-english"
+    filename="phpMyAdmin-${version}-all-languages"
     fileUrl="https://files.phpmyadmin.net/phpMyAdmin/${version}/${filename}.tar.gz"
     # Commands
     sudo wget "${fileUrl}"
