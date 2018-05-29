@@ -111,9 +111,9 @@ if [ $usePhp5 = true ]; then
     sudo apt-get install python-software-properties -y
     sudo add-apt-repository ppa:ondrej/php -y
     sudo apt-get update
-    sudo apt-get install php5.6-fpm php5.6-mysql php5.6-cli php5.6-mcrypt php5.6-curl php5.6-mbstring php5.6-imagick php5.6-gd php5.6-xml -y
+    sudo apt-get install php5.6-fpm php5.6-mysql php5.6-cli php5.6-mcrypt php5.6-curl php5.6-mbstring php5.6-imagick php5.6-gd php5.6-xml php5.6-zip -y
 else
-    sudo apt-get install php-fpm php-mysql php-cli php-mcrypt php-curl php-mbstring php-imagick php-gd php-xml -y
+    sudo apt-get install php-fpm php-mysql php-cli php-mcrypt php-curl php-mbstring php-imagick php-gd php-xml php-zip -y
     sudo apt-get install php-memcached memcached -y
     sudo phpenmod mcrypt
 fi
