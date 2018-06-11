@@ -136,6 +136,7 @@ if [ $installPhpMyAdmin = true ]; then
     # Commands
     sudo wget "${fileUrl}"
     sudo tar -zxvf "${filename}.tar.gz" -C "${webPath}"
+    sudo rm -f "${filename}.tar.gz"
     sudo mv "${webPath}${filename}" "${webPath}phpmyadmin"
     # Nginx Default Site
     if [ $usePhp5 = true ]; then
