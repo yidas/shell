@@ -128,7 +128,7 @@ fi
 # PHPMyAdmin
 if [ $installPhpMyAdmin = true ]; then
     # Configuration
-    version="4.8.0.1"
+    version="4.8.2"
     webPath="/var/www/html/"
     #filename="phpMyAdmin-${version}-english"
     filename="phpMyAdmin-${version}-all-languages"
