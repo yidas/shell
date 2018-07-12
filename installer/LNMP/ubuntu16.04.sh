@@ -67,6 +67,15 @@ case $yn in
     [Nn]* ) installPhpMyAdmin=false;;
     * ) installPhpMyAdmin=true;;
 esac
+# PHPMyAdmin with Metro theme
+if [ $installPhpMyAdmin = true ]; then
+    echo "PHPMyAdmin: Do you want to install Metro theme? [Y/n, empty as Yes]"
+    read yn
+    case $yn in
+        [Nn]* ) installPhpMyAdminTheme=false;;
+        * ) installPhpMyAdminTheme=true;;
+    esac
+fi
 
 # Access
 if [ $sshPasswodAuthOn ]; then
@@ -147,6 +156,19 @@ if [ $installPhpMyAdmin = true ]; then
     fi
     
     sudo wget "${configUrl}" -O /etc/nginx/sites-available/default
+    
+    # PHPMyAdmin theme
+    if [ $installPhpMyAdminTheme = true ]; then
+        # Configuration
+        file="metro-2.8.zip"
+        fileUrl="https://files.phpmyadmin.net/themes/metro/2.8/${file}"
+        # Commnads
+        sudo cd "${webPath}phpmyadmin/thmems"
+        sudo wget "${fileUrl}"
+        sudo apt install unzip -y
+        sudo unzip "${file}"
+        sudo rm "${file}"
+    fi
 fi
 
 sudo service nginx reload
