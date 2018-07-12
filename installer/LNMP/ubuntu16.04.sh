@@ -163,11 +163,11 @@ if [ $installPhpMyAdmin = true ]; then
         file="metro-2.8.zip"
         fileUrl="https://files.phpmyadmin.net/themes/metro/2.8/${file}"
         # Commnads
-        sudo cd "${webPath}phpmyadmin/thmems"
-        sudo wget "${fileUrl}"
+        pathTheme="${webPath}phpmyadmin/themes"
+        sudo wget "${fileUrl}" -P "${pathTheme}"
         sudo apt install unzip -y
-        sudo unzip "${file}"
-        sudo rm "${file}"
+        sudo unzip "${pathTheme}/${file}" -d "${pathTheme}/"
+        sudo rm "${pathTheme}/${file}"
     fi
 fi
 
