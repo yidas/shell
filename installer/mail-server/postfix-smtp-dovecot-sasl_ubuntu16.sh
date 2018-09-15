@@ -27,12 +27,11 @@ sudo postconf -e 'smtpd_sasl_local_domain ='
 sudo postconf -e 'smtpd_sasl_security_options = noanonymous'
 sudo postconf -e 'broken_sasl_auth_clients = yes'
 sudo postconf -e 'smtpd_sasl_auth_enable = yes'
-sudo postconf -e 'smtpd_recipient_restrictions = \
-permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination'
+sudo postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination'
 
 # Dovecot SASL setting for Postfix
 sed -i '/# Postfix smtp-auth/c\  # Postfix smtp-auth\n  unix_listener /var/spool/postfix/private/auth {\n    model=0600\n  }' /etc/dovecot/conf.d/10-master.conf
 sed -i '/auth_mechanisms = plain/c\auth_mechanisms = plain login' /etc/dovecot/conf.d/10-auth.conf
 
 sudo service dovecot reload
-sudo service  reload
+sudo service postfix reload
