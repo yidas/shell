@@ -18,7 +18,7 @@ sudo apt-get update
 
 # Packages
 sudo apt install postfix -y
-sudo apt install postfix -y
+sudo apt install dovecot.core -y
 
 # Postfix setting for Dovecot SASL
 sudo postconf -e 'smtpd_sasl_type = dovecot'
