@@ -49,7 +49,7 @@ if [ $installAdmin = true ]; then
   # Install admin
   # Composer
   curl -s http://getcomposer.org/installer | php
-  php composer.phar create-project erik-dubbelboer/php-redis-admin /var/www/html/redis
+  php composer.phar create-project erik-dubbelboer/php-redis-admin /var/www/html/phpredisadmin
   # Site setting
   configUrl='https://raw.githubusercontent.com/yidas/shell/master/installer/config/nginx/sites-enabled/default-php7.0'
   sudo wget "${configUrl}" -O /etc/nginx/sites-available/default
