@@ -15,7 +15,7 @@
 SERVICE_CMD="php /var/www/html/worker.php"
 
 # Add-on command which is not showed in process list
-ADDON_CMD="> /root/worker.log"
+ADDON_CMD="> /tmp/worker.log"
 
 if [ "$1" ]; then
     SERVICE_CMD=$1
