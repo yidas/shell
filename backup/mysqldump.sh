@@ -1,114 +1,105 @@
 #!/bin/bash
 
-# Database Backup Script
+# Database Copy Script
 #
-# Provides multiple mysqldump commands with compressing into one.
+# Provides two servers's database copy
 #
 # @author  Nick Tsai <myintaer@gmail.com>
-# @version 1.1.0
+# @version 1.0.0
 # @link    https://github.com/yidas/shell
-# @example
-#  # /etc/cron.d
-#  00 02 * * 0 [ $(date +\%d) -le 07 ] && root /root/backup/mysqldump.sh > /dev/null
 
 #
 # Configuration
 #
 
-# Database Config
-dbName=""
-dbUser="root"
-dbPasswd=""
-charset="utf8"
-dbHost="localhost"
+# Source Database Config
+declare -A src
+src[dbName]="source_dbname"
+src[dbUser]=""
+src[dbPasswd]=""
+src[charset]="utf8"
+src[dbHost]="source.db.com"
 
-# Database Advanced Config
-# Table Array to Use --skip-extended-insert (Ex. Big-Text table)
-# #example insertTables=("stroage" "json_text")
-insertTables=("")
-# Table Array to Use --no-data (Ex. Log table)
-# #example nodataTables=("log" "sys_log")
-nodataTables=("")
+# Destination Database Config
+declare -A dst
+dst[dbName]=""
+dst[dbUser]=""
+dst[dbPasswd]=""
+dst[charset]="utf8"
+dst[dbHost]="localhost"
 
-# Directory for excuting and saving files
-backupPath="/root/backup/archives"
+# Directory for temporary saving files
+tmpPath="/tmp"
 
 # Date format for filename
 dateFormat='%Y%m%d'
 
-# Backup filename
-backupFilename="backup-sql"
-
-# Before day for remove, for daily crontab usage
-removeBeforeDay=0
+# Database Advanced Config
+# Table Array to Use --no-data (Ex. Log table)
+# #example nodataTables=("log" "sys_log")
+nodataTables=("behavior_log" "object_storage" "login_log")
 
 #
 # /Configuration
 #
 
-
 now=$(date +$dateFormat)
-before=$(date -d "-${removeBeforeDay} days" +$dateFormat)
-sqlList=()
-cd "$backupPath"
+cd "$tmpPath"
 
-# Ignore Tables = insertTables + nodataTables
-ignoreTableString=""
-
-# Option for insertTables setting
-if [[ ${insertTables[@]} ]]
+# Auto DB name
+if [ "${dst[dbName]}" == '' ]
 then
-    tableString=""
-    for i in "${insertTables[@]}"
-    do
-       tableString="${tableString} ${i}"
-       ignoreTableString="${ignoreTableString} --ignore-table=${dbName}.${i}"
+    dst[dbName]="${src[dbName]}_${now}";
+    count=0;
+    while : ; do
+        result=$(echo "show databases;" | mysql -h${dst[dbHost]} -u ${dst[dbUser]} -p${dst[dbPasswd]} | grep "${dst[dbName]}" | wc -l);
+        if [ $result != "0" ]
+        then
+            count=$(($count+1));
+            dst[dbName]="${src[dbName]}_${now}_${count}";
+        else
+            break;
+        fi
     done
-
-    # Command
-    sqlFile="${dbName}_insert.sql"
-    mysqldump -h$dbHost -u $dbUser -p$dbPasswd --skip-extended-insert --default-character-set=$charset $dbName $tableString  > "${sqlFile}"
-    sqlList+=("${sqlFile}")
 fi
+
+# Auto Distant Setting 
+for i in "${!dst[@]}"
+do
+    # Same as source if not set
+    if [ "${dst[$i]}" == '' ]
+    then
+        dst[$i]="${src[$i]}"
+    fi
+done
 
 # Option for nodataTables setting
+ignoreTableString="";
 if [[ ${nodataTables[@]} ]]
 then
-    tableString=""
     for i in "${nodataTables[@]}"
     do
-       tableString="${tableString} ${i}"
-       ignoreTableString="${ignoreTableString} --ignore-table=${dbName}.${i}"
+       ignoreTableString="${ignoreTableString} --ignore-table=${src[dbName]}.${i}"
     done
-
-    # Command
-    sqlFile="${dbName}_nodata.sql"
-    mysqldump -h$dbHost -u $dbUser -p$dbPasswd --no-data --default-character-set=$charset $dbName $tableString  > "${sqlFile}"
-    sqlList+=("${sqlFile}")
 fi
 
-# Main Database Handler
-sqlFile="${dbName}.sql"
-mysqldump -h$dbHost -u $dbUser -p$dbPasswd --default-character-set=$charset $dbName $ignoreTableString > "${sqlFile}"
-sqlList+=("${sqlFile}")
 
-# Main Database All Tables Structure Only Handler
-sqlFile="${dbName}_structure_all.sql"
-mysqldump -h$dbHost -u $dbUser -p$dbPasswd --no-data --default-character-set=$charset $dbName > "${sqlFile}"
-sqlList+=("${sqlFile}")
+# Copy Process
+sqlFile="${src[dbName]}.sql"
 
+# Create database query
+query='create database `'${dst[dbName]}'` DEFAULT CHARACTER SET '${dst[charset]}'; use `'${dst[dbName]}'`;'
+mysql -h${dst[dbHost]} -u ${dst[dbUser]} -p${dst[dbPasswd]} -e "${query}"
 
-# Compress all files in sqlList
-tar zcvf "${backupFilename}_${now}.tar.gz" "${sqlList[@]}"
+# Dump structure
+mysqldump -h${src[dbHost]} -u ${src[dbUser]} -p${src[dbPasswd]} --set-gtid-purged=off --default-character-set=${src[charset]} --no-data ${src[dbName]} > "${sqlFile}";
+mysql -h${dst[dbHost]} -u ${dst[dbUser]} -p${dst[dbPasswd]} ${dst[dbName]} < "${sqlFile}";
 
-# Remove files after compress
-rm -f "${sqlList[@]}"
+# Dump data
+mysqldump -h${src[dbHost]} -u ${src[dbUser]} -p${src[dbPasswd]} --set-gtid-purged=off --default-character-set=${src[charset]} ${src[dbName]} ${ignoreTableString}  > "${sqlFile}";
+mysql -h${dst[dbHost]} -u ${dst[dbUser]} -p${dst[dbPasswd]} ${dst[dbName]} < "${sqlFile}";
 
-# Remove before backupfile
-if [ $removeBeforeDay != 0 ]
-then
-    rm -f "${backupFilename}_${before}.tar.gz"
-fi
+# Remove files after copy
+rm -f "${sqlFile}"
 
 exit 1
-
