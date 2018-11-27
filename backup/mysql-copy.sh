@@ -14,7 +14,7 @@
 
 # Source Database Config
 declare -A src
-src[dbName]=""
+src[dbName]="db_name"
 src[dbUser]=""
 src[dbPasswd]=""
 src[charset]="utf8"
@@ -22,7 +22,7 @@ src[dbHost]="localhost"
 
 # Destination Database Config
 declare -A dst
-dst[dbName]=""
+dst[dbName]="" # Empty to use auto database name generator
 dst[dbUser]=""
 dst[dbPasswd]=""
 dst[charset]="utf8"
