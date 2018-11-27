@@ -37,7 +37,7 @@ dateFormat='%Y%m%d'
 # Database Advanced Config
 # Table Array to Use --no-data (Ex. Log table)
 # #example nodataTables=("log" "sys_log")
-nodataTables=("behavior_log" "object_storage" "login_log")
+nodataTables=()
 
 #
 # /Configuration
