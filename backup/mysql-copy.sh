@@ -15,7 +15,7 @@
 # Source Database Config
 declare -A src
 src[dbName]=""
-src[dbUser]="root"
+src[dbUser]=""
 src[dbPasswd]=""
 src[charset]="utf8"
 src[dbHost]="localhost"
@@ -25,8 +25,8 @@ declare -A dst
 dst[dbName]=""
 dst[dbUser]=""
 dst[dbPasswd]=""
-dst[charset]=""
-dst[dbHost]=""
+dst[charset]="utf8"
+dst[dbHost]="localhost"
 
 # Directory for temporary saving files
 tmpPath="/tmp"
