@@ -20,7 +20,7 @@ src[dbPasswd]=""
 src[charset]="utf8"
 src[dbHost]="localhost"
 
-# Source Database Config
+# Destination Database Config
 declare -A dst
 dst[dbName]=""
 dst[dbUser]=""
