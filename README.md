@@ -12,9 +12,9 @@ OUTLINE
 
 Backup scripts for code project, database, files.
 
-- ### [Installer](installer)
+- ### [Installer](https://github.com/yidas/server-installers)
 
-Server Services Auto-Installer base on Linux. 
+Server Services Auto-Installer base on Linux (Moved to [yidas/server-installers](https://github.com/yidas/server-installers)). 
 
 - ### [LS_Colors](ls_colors)
 
