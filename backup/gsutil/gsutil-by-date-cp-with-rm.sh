@@ -1,8 +1,9 @@
 #!/bin/bash
   
-# Object Storage Backup Script
+# GCP Object Storage Backup Script
 #
-# Copy local file to object storage.   
+# Copy local file to object storage by dynamic date with remove old one.
+# Permission: Creator for once, Admin for overwrite
 #
 # @author  Nick Tsai <myintaer@gmail.com>
 # @version 0.1.0
