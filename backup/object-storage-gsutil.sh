@@ -1,5 +1,5 @@
 #!/bin/bash
-
+  
 # Object Storage Backup Script
 #
 # Copy local file to object storage.   
@@ -44,7 +44,7 @@ fi
 
 now=$(date +$dateFormat)
 before=$(date -d "-${removeBeforeDay} days" +$dateFormat)
-cd "$backupPath"
+cd "$sourcePath"
 
     gsutil cp "${sourceFile}" "${backupPath}/${backupFilename}_${now}_${sourceFile}"
 
