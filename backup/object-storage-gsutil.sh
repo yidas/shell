@@ -12,20 +12,18 @@
 #  ./object-storage-gsutil.sh
 #  ./object-storage-gsutil.sh /var/www/html project.zip
 
+# Date format for filename
+dateFormat='%Y%m%d'
+now=$(date +$dateFormat)
+
 # Directory of source code for tar except path
 sourcePath="/var/www/html/"
 
 # File for tar output, use `.` for all
-sourceFile="file.zip"
+sourceFile="file_${now}.zip"
 
 # Directory for excuting and saving files
 backupPath="gs://bucket"
-
-# Date format for filename
-dateFormat='%Y%m%d'
-
-# Backup filename
-backupFilename="backup"
 
 # Before day for remove, for daily crontab usage
 removeBeforeDay=0
@@ -42,11 +40,11 @@ then
     sourceFile=$2
 fi
 
-now=$(date +$dateFormat)
+
 before=$(date -d "-${removeBeforeDay} days" +$dateFormat)
 cd "$sourcePath"
 
-    gsutil cp "${sourceFile}" "${backupPath}/${backupFilename}_${now}_${sourceFile}"
+    gsutil cp "${sourceFile}" "${backupPath}"
 
 # Remove before backupfile
 if [ $removeBeforeDay != 0 ]
