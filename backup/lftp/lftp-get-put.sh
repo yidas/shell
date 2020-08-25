@@ -19,6 +19,8 @@ optionString="set ssl:verify-certificate false;"
 # File config
 dateFormat=$(date +"%Y%m%d")
 filename="FILE_${dateFormat}.ZIP"
+lcd="./"
+cd="./"
 # put: Upload | mget: Download
 method="mget"
 
@@ -27,5 +29,7 @@ lftp -e "
 ${optionString}
 open ${host}; 
 login ${username} ${password}; 
+cd ${cd};
+lcd ${lcd};
 ${method} ${filename}; 
 bye;"
