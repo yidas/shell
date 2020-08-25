@@ -17,10 +17,10 @@ username=""
 password=""
 optionString="set ssl:verify-certificate false;"
 # File config
-dateFormat=$(date +"%Y%m%d")
-filename="FILE_${dateFormat}.ZIP"
 lcd="./"
 cd="./"
+dateFormat=$(date +"%Y%m%d")
+filename="FILE_${dateFormat}.ZIP"
 # put: Upload | mget: Download
 method="mget"
 
