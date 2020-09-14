@@ -10,6 +10,7 @@
 #
 # @example
 #  ./lftp-get-put.sh
+#  ./lftp-get-put.sh 20200901
 
 # LFTP config
 host="ftps://yourftps.local"
@@ -20,6 +21,7 @@ optionString="set ssl:verify-certificate false;"
 lcd="./"
 cd="./"
 dateFormat=$(date +"%Y%m%d")
+if [ $1 ]; then dateFormat=$1; fi
 filename="FILE_${dateFormat}.ZIP"
 # put: Upload | mget: Download
 method="mget"
