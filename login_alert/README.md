@@ -1,7 +1,7 @@
 Login Alert
 ===========
 
-1. Create the bash for sending mail by root
+1. Create the bash ([login-notify.sh](https://github.com/yidas/shell/blob/master/login_alert/login-notify.sh)) for sending mail executed by root (`chmod +x`)
 
 2. Add command into `/etc/pam.d/sshd`
 
